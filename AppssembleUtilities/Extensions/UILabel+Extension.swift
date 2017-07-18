@@ -8,8 +8,8 @@
 
 import UIKit
 
-extension UILabel {
-    @IBInspectable var iphone4Font: CGFloat {
+public extension UILabel {
+    @IBInspectable var iphone4FontSize: CGFloat {
         get {
             guard let font = self.font else {
                 return 0
@@ -25,7 +25,7 @@ extension UILabel {
         }
     }
     
-    @IBInspectable var iphone5Font: CGFloat {
+    @IBInspectable var iphone5FontSize: CGFloat {
         get {
             guard let font = self.font else {
                 return 0

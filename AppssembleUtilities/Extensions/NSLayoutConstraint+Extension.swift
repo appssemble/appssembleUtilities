@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension NSLayoutConstraint {
+public extension NSLayoutConstraint {
     
     @IBInspectable var iphone4Constraint: CGFloat {
         get {

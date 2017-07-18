@@ -8,15 +8,11 @@
 
 import Foundation
 
-extension Date {
-    func dateString() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy"
-        
-        return dateFormatter.string(from: self)
-    }
+public extension Date {
     
-    static func dateFromString(string: String) -> Date {
+    // MARK: Static methods
+    
+    public static func dateFromString(string: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let date = dateFormatter.date(from: string)!
@@ -24,7 +20,16 @@ extension Date {
         return date
     }
     
-    func longDateString() -> String {
+    // MARK: Class methods
+    
+    public func dateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    public func longDateString() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy, hh:mm a"
         
