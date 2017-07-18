@@ -15,22 +15,16 @@ enum ImagePickerType {
     case library
 }
 
-protocol ImagePickerProtocol: class {
+public protocol ImagePickerProtocol: class {
     func didPickImage(helper: ImagePickerHelper, image: UIImage)
 }
 
-fileprivate class JustSnapImagePicker: UIImagePickerController {
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-}
-
-class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+public class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    weak var delegate: ImagePickerProtocol?
+    public weak var delegate: ImagePickerProtocol?
     weak var viewController: UIViewController?
     
-    struct Constants {
+    public struct Constants {
         // Initial popup
         static var locationTitle = "Location"
         static var locationMesage = "From where do you wish to upload the picture?"
@@ -54,14 +48,14 @@ class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigation
         static var targetWidth: CGFloat = 1024.0
     }
     
-    init(viewController: UIViewController) {
+    public init(viewController: UIViewController) {
         self.viewController = viewController
-
+        
     }
     
     // MARK: Public methods
     
-    func pickImage() {
+    public func pickImage() {
         let alertController = UIAlertController(title: Constants.locationTitle, message: Constants.locationMesage, preferredStyle: .alert)
         
         let camera = UIAlertAction(title: Constants.camera, style: .default) { (_) in
@@ -83,7 +77,7 @@ class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigation
     
     // MARK: Image picker delegate
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: nil)
         
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
@@ -100,7 +94,7 @@ class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigation
     // MARK: Private methods
     
     private func pickImage(sourceType: ImagePickerType) {
-        let picker = JustSnapImagePicker()
+        let picker = UIImagePickerController()
         picker.delegate = self
         
         switch sourceType {
@@ -173,7 +167,7 @@ class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigation
         
         alert.addAction(UIAlertAction(title: Constants.cancel, style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: Constants.cameraAccessAllow, style: .cancel, handler: { (alert) -> Void in
-            UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+            self.openSettingsMenu()
         }))
         
         viewController?.present(alert, animated: true, completion: nil)
@@ -186,28 +180,51 @@ class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigation
         
         alert.addAction(UIAlertAction(title: Constants.cancel, style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: Constants.photosLibraryAllow, style: .cancel, handler: { (alert) -> Void in
-            UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+            self.openSettingsMenu()
         }))
         
         viewController?.present(alert, animated: true, completion: nil)
     }
     
     private func requestAccessCamera(success : @escaping () -> Void) {
-        AVCaptureDevice.defaultDevice(withDeviceType: .builtInWideAngleCamera, mediaType: AVMediaTypeVideo, position: .front)
-        
-        if let session = AVCaptureDeviceDiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .back) {
+        if #available(iOS 10.0, *) {
+            requestCameraAccessiOS10(success)
+        } else {
+            requestCameraAccessPreiOS10(success)
+        }
+    }
+    
+    private func requestCameraAccessiOS10(_ success : @escaping () -> Void) {
+        if #available(iOS 10.0, *) {
+            AVCaptureDevice.defaultDevice(withDeviceType: .builtInWideAngleCamera, mediaType: AVMediaTypeVideo, position: .front)
             
-            if session.devices.count > 0 {
-                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { (granted: Bool) in
-                    
-                    if granted {
-                        DispatchQueue.main.async {
-                            success()
+            if let session = AVCaptureDeviceDiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .back) {
+                
+                if session.devices.count > 0 {
+                    AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { (granted: Bool) in
+                        
+                        if granted {
+                            DispatchQueue.main.async {
+                                success()
+                            }
                         }
                     }
                 }
             }
         }
+    }
+    
+    private func requestCameraAccessPreiOS10(_ success : @escaping () -> Void) {
+        if AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo).count > 0 {
+            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { (granted: Bool) in
+                if granted {
+                    DispatchQueue.main.async {
+                        success()
+                    }
+                }
+            }
+        }
+        
     }
     
     private func requestPhotoLibraryAccess() {
@@ -237,5 +254,14 @@ class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigation
         }
         
         return nil
+    }
+    
+    private func openSettingsMenu() {
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+        }
     }
 }
