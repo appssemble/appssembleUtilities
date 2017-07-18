@@ -8,12 +8,12 @@
 
 import Foundation
 
-func +(lhs: NSDecimalNumber, rhs: NSDecimalNumber) -> NSDecimalNumber {
+public func +(lhs: NSDecimalNumber, rhs: NSDecimalNumber) -> NSDecimalNumber {
     return lhs.adding(rhs)
 }
 
-extension NSDecimalNumber {
-    var clean: String {
+public extension NSDecimalNumber {
+    public var clean: String {
         let formatter = NumberFormatter()
         formatter.roundingMode = .halfUp
         formatter.maximumFractionDigits = 2
@@ -31,19 +31,19 @@ extension NSDecimalNumber {
         }
     }
     
-    func multiplyWithInt(_ int: Int) -> NSDecimalNumber {
+    public func multiplyWithInt(_ int: Int) -> NSDecimalNumber {
         let decimal = NSDecimalNumber(value: int)
         
         return self.multiplying(by: decimal)
     }
     
-    func divideWithInt(_ int: Int) -> NSDecimalNumber {
+    public func divideWithInt(_ int: Int) -> NSDecimalNumber {
         let decimal = NSDecimalNumber(value: int)
         
         return self.dividing(by: decimal)
     }
     
-    func discountedWithInt(_ int: Int) -> NSDecimalNumber {
+    public func discountedWithInt(_ int: Int) -> NSDecimalNumber {
         let discount = NSDecimalNumber(value: int)
         let hundred = NSDecimalNumber(value: 100)
         

@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum ScreenType: String {
+public enum ScreenType: String {
     case iPhone4
     case iPhone5
     case iPhone6
@@ -16,12 +16,12 @@ enum ScreenType: String {
     case unknown
 }
 
-extension UIDevice {
-    var iPhone: Bool {
+public extension UIDevice {
+    public var iPhone: Bool {
         return UIDevice().userInterfaceIdiom == .phone
     }
     
-    var screenType: ScreenType {
+    public var screenType: ScreenType {
         guard iPhone else {
             return .unknown
         }

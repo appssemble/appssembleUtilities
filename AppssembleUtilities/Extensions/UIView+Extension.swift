@@ -8,9 +8,9 @@
 
 import UIKit
 
-extension UIView {
+public extension UIView {
     
-    func clipToSuperview() {
+    public func clipToSuperview() {
         if let superview = superview {
             self.topAnchor.constraint(equalTo: superview.topAnchor, constant: 0).isActive = true
             self.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: 0).isActive = true
@@ -19,7 +19,7 @@ extension UIView {
         }
     }
     
-    func addUnderline(height: CGFloat, color: UIColor) {
+    public func addUnderline(height: CGFloat, color: UIColor) {
         let border = UIView()
         border.backgroundColor = color
         border.frame = CGRect(x: 0, y: frame.size.height - height, width: frame.size.width, height: height)
@@ -27,7 +27,7 @@ extension UIView {
         self.addSubview(border)
     }
     
-    func roate(amount: Double) {
+    public func roate(amount: Double) {
         UIView.animate(withDuration: 0.5, animations: {
             self.transform = CGAffineTransform(rotationAngle: CGFloat(amount))
         })
