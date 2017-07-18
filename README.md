@@ -1,10 +1,17 @@
 # appssembleUtilities
 Utilities for a new project used by our team, for now in the first version it involves various extensions and a helper for image picking
 
-# installation
+
+
+# Installation
 You can use this library using cocoapods, simply add "pod ‘AppssembleUtilities’" to your Podfile file and you are good to go
 
-# usage
+
+
+# Usage
+
+
+
 
 # ImagePickerHelper 
 Takes the burden of implementing all the validation needed in order for you to add the ability to pick an image 
@@ -68,3 +75,8 @@ Storyboard/XIB custom values for font size on iPhone 4 and 5
 - clipToSuperview() - adds constraints to the current view in order to clip it to its superview
 - addUnderline(height, color) - adds an underline as a border under the current view
 - rotate(amount) - rotates the view with the specified amount
+
+
+# LICENSE
+
+WTFPL -> https://en.wikipedia.org/wiki/WTFPL
