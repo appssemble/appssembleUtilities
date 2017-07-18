@@ -7,7 +7,7 @@ Pod::Spec.new do |spec|
   spec.authors = { "Dragos Dobrean" => 'dragos@appssemble.com' }
   spec.social_media_url = "http://www.appssemble.com"
 
-  spec.platform = :ios, "10.0"
+  spec.platform = :ios, "9.0"
   spec.requires_arc = true
   spec.source = { git: "https://github.com/appssemble/appssembleUtilities.git", tag: "v#{spec.version}", submodules: false }
   spec.source_files = "AppssembleUtilities/**/*.{h,swift}"
